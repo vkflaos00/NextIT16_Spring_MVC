@@ -68,7 +68,7 @@
 </select>
 
 
-<select id="getBaordList" parameterType="kr.or.nextit.free.vo.FreeBoardSearchVO"
+<select id="getBoardList" parameterType="kr.or.nextit.free.vo.FreeBoardSearchVO"
 	resultType="kr.or.nextit.free.vo.FreeBoardVO">
 
 	select																			

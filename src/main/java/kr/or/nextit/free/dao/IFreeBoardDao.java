@@ -13,7 +13,7 @@ public interface IFreeBoardDao {
 
 	int getTotalRowCount(FreeBoardSearchVO searchVO);
 
-	List<FreeBoardVO> getBaordList(FreeBoardSearchVO searchVO);
+	List<FreeBoardVO> getBoardList(FreeBoardSearchVO searchVO);
 
 	FreeBoardVO getBoard(String boNo);
 

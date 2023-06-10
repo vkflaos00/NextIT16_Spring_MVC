@@ -2,6 +2,8 @@ package kr.or.nextit.free.service;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.stereotype.Service;
@@ -17,17 +19,20 @@ import kr.or.nextit.free.vo.FreeBoardVO;
 @Service("freeBoardService")
 public class FreeBoardServiceImpl implements IFreeBoardService {
 
-	SqlSessionFactory sqlSessionFactory = NextITSqlSessionFactory.getSqlSessionFactory();
+	//SqlSessionFactory sqlSessionFactory = NextITSqlSessionFactory.getSqlSessionFactory();
 
+	@Inject
+	private IFreeBoardDao freeDao;
+	
 	@Override
 	public void registerBoard(FreeBoardVO freeBoard) throws BizNotEffectedException {
 		// TODO Auto-generated method stub
-		System.out.println("FreeBoardServiceImpl registerBoard");
+		System.out.println("void registerBoard");
 		
-		SqlSession sqlSession = sqlSessionFactory.openSession(true);  
-		IFreeBoardDao freeDao = sqlSession.getMapper(IFreeBoardDao.class);
-		try {
-			
+//		SqlSession sqlSession = sqlSessionFactory.openSession(true);  
+//		IFreeBoardDao freeDao = sqlSession.getMapper(IFreeBoardDao.class);
+		
+		
 			String boNo = freeDao.getFreeBoardKey();
 			System.out.println("boNo: "+ boNo);
 			freeBoard.setBoNo(boNo);
@@ -37,52 +42,38 @@ public class FreeBoardServiceImpl implements IFreeBoardService {
 			if(resultCnt != 1) {
 				throw new BizNotEffectedException();
 			}
-		}finally {
-			sqlSession.close();
 		}
 
 		
-		
-	}
+	
 
 
 	@Override
 	public List<FreeBoardVO> getBoardList(FreeBoardSearchVO searchVO) throws BizNotEffectedException {
-		// TODO Auto-generated method stub
-		//return null;
 		
-		SqlSession sqlSession = sqlSessionFactory.openSession(true);  
-		IFreeBoardDao freeDao = sqlSession.getMapper(IFreeBoardDao.class);
-		try {
-			
-			int totalRowCount = freeDao.getTotalRowCount(searchVO);
+//		SqlSession sqlSession = sqlSessionFactory.openSession(true);  
+//		IFreeBoardDao freeDao = sqlSession.getMapper(IFreeBoardDao.class);
+		int totalRowCount = freeDao.getTotalRowCount(searchVO);
 			
 			searchVO.setTotalRowCount(totalRowCount);
 			searchVO.pageSetting();
 			System.out.println("searchVO.toString() "+ searchVO.toString());
 			
-			List<FreeBoardVO> freeBoardList = freeDao.getBaordList(searchVO);
+			List<FreeBoardVO> freeBoardList = freeDao.getBoardList(searchVO);
 			
 			if(freeBoardList == null) {
 				throw new BizNotEffectedException();
 			}
 			return freeBoardList;
-		}finally {
-			sqlSession.close();
 		}
-		
-		
-	}
-
+	
 	@Override
 	public FreeBoardVO getBoard(String boNo) throws BizNotEffectedException {
-		// TODO Auto-generated method stub
-				
 		System.out.println("getBoard_boNo: "+ boNo);
 
-		SqlSession sqlSession = sqlSessionFactory.openSession(true);  
-		IFreeBoardDao freeDao = sqlSession.getMapper(IFreeBoardDao.class);
-		try {
+//		SqlSession sqlSession = sqlSessionFactory.openSession(true);  
+//		IFreeBoardDao freeDao = sqlSession.getMapper(IFreeBoardDao.class);
+		
 			FreeBoardVO freeBoard = freeDao.getBoard(boNo);
 			
 			if(freeBoard == null ) {
@@ -90,38 +81,27 @@ public class FreeBoardServiceImpl implements IFreeBoardService {
 			}
 			return freeBoard;
 			
-		}finally {
-			sqlSession.close();
 		}
-				
-	}
 
 
 	@Override
 	public void increaseHit(String boNo) throws BizNotEffectedException {
-		// TODO Auto-generated method stub
-		
-		SqlSession sqlSession = sqlSessionFactory.openSession(true);  
-		IFreeBoardDao freeDao = sqlSession.getMapper(IFreeBoardDao.class);
-		try {
+			
+//		SqlSession sqlSession = sqlSessionFactory.openSession(true);  
+//		IFreeBoardDao freeDao = sqlSession.getMapper(IFreeBoardDao.class);
 			int cnt = freeDao.increaseHit(boNo);
 			
 			if( cnt != 1) {
 				throw new BizNotEffectedException();
 			}
-		}finally {
-			sqlSession.close();
 		}
-	}
 
 	@Override
 	public void modifyBoard(FreeBoardVO freeBoard) throws BizNotFoundException, BizPasswordNotMatchedException, BizNotEffectedException {
-		// TODO Auto-generated method stub
 
-		SqlSession sqlSession = sqlSessionFactory.openSession(true);  
-		IFreeBoardDao freeDao = sqlSession.getMapper(IFreeBoardDao.class);
+//		SqlSession sqlSession = sqlSessionFactory.openSession(true);  
+//		IFreeBoardDao freeDao = sqlSession.getMapper(IFreeBoardDao.class);
 		
-		try {
 			FreeBoardVO  vo = freeDao.getBoard(freeBoard.getBoNo());
 			if( vo==null) {
 				throw new BizNotFoundException();
@@ -134,20 +114,13 @@ public class FreeBoardServiceImpl implements IFreeBoardService {
 			if(resultCnt != 1 ){ 
 				throw new BizNotEffectedException(); 
 			}
-		}finally {
-			sqlSession.close();	
 		}
-
-	}
-
 	
 	@Override
 	public void deleteBoard(FreeBoardVO freeBoard) throws BizNotFoundException, BizPasswordNotMatchedException, BizNotEffectedException {
-		// TODO Auto-generated method stub
 		
-		SqlSession sqlSession = sqlSessionFactory.openSession(true);  
-		IFreeBoardDao freeDao = sqlSession.getMapper(IFreeBoardDao.class);
-		try {
+//		SqlSession sqlSession = sqlSessionFactory.openSession(true);  
+//		IFreeBoardDao freeDao = sqlSession.getMapper(IFreeBoardDao.class);
 			FreeBoardVO  vo = freeDao.getBoard(freeBoard.getBoNo());
 			if( vo==null) {
 				throw new BizNotFoundException();
@@ -161,18 +134,14 @@ public class FreeBoardServiceImpl implements IFreeBoardService {
 			if(resultCnt != 1 ){ 
 				throw new BizNotEffectedException(); 
 			}
-		}finally {
-			sqlSession.close();	
 		}
-	}
 
 
 	@Override
 	public void hideBoard(String memId, String boNo) throws BizNotEffectedException {
-		// TODO Auto-generated method stub
-		SqlSession sqlSession = sqlSessionFactory.openSession(true);  
-		IFreeBoardDao freeDao = sqlSession.getMapper(IFreeBoardDao.class);
-		try {		
+		
+//		SqlSession sqlSession = sqlSessionFactory.openSession(true);  
+//		IFreeBoardDao freeDao = sqlSession.getMapper(IFreeBoardDao.class);
 			FreeBoardVO freeBoard = new FreeBoardVO();
 			freeBoard.setBoWriter(memId);
 			freeBoard.setBoNo(boNo);
@@ -186,11 +155,7 @@ public class FreeBoardServiceImpl implements IFreeBoardService {
 			if(resultCnt != 1 ){ 
 				throw new BizNotEffectedException(); 
 			}
-		}finally {
-			sqlSession.close();	
 		}
-	}
-
 
 	
 	
